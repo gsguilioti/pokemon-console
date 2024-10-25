@@ -6,6 +6,6 @@ set(RPCLIB_LIBRARY_DIR "$ENV{HOME}/rpclib/build")
 
 include_directories(${RPCLIB_INCLUDE_DIR})
 
-add_executable(server main.cpp server.cpp)
+add_executable(server main.cpp game.cpp)
 
 target_link_libraries(server PRIVATE ${RPCLIB_LIBRARY_DIR}/librpc.a)

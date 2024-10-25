@@ -1,7 +1,10 @@
 #include "rpc/server.h"
 
 #include <iostream>
-#include "server.h"
+#include "game.h"
+
+Game game;
+std::mutex game_mutex;
 
 int main()
 {
@@ -9,15 +12,19 @@ int main()
 
     srv.bind("connect", [&]() 
     {
-        on_player_connect();
-        return "connected: " + std::to_string(players) + "/2\n";
+        std::lock_guard<std::mutex> lock(game_mutex);
+        game.on_player_connect();
+        return "connected: " + std::to_string(game.players) + "/2\n";
     });
 
     srv.bind("disconnect", [&]() 
     {
-        on_player_disconnect();
-        return "disconnected: " + std::to_string(players) + "/2\n";
+        std::lock_guard<std::mutex> lock(game_mutex);
+        game.on_player_disconnect();
+        return "disconnected: " + std::to_string(game.players) + "/2\n";
     });
+
+    srv.bind("perform_action", [&game](int player, const std::string& action){ return game.perform_action(player, action); });
 
     srv.run();
 
