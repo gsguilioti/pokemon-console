@@ -20,28 +20,22 @@ int main()
 {
     std::signal(SIGINT, cleanup);
 
-    std::string response = client.call("connect").as<std::string>();
-    std::cout << response << std::endl;
+    int player;
+    std::tuple<int, std::string> response = client.call("connect").as<std::tuple<int, std::string>>();
+    std::cout << std::get<1>(response) << std::endl;
+    player = std::get<0>(response);
 
     while (true) 
     {
         std::this_thread::sleep_for(std::chrono::seconds(1));
-
-        try
+        bool started = client.call("game_started").as<bool>();
+        if(!started)
         {
-            std::string action = "attack";
-            std::string response = client.call("perform_action", static_cast<int>(PLAYER_ONE), action).as<std::string>();
-            std::cout << "Server response: " << response << std::endl;
-
-            if (response == "It's not your turn!") {
-                std::cout << "Waiting for your turn..." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(2));
-            }
+            std::cout << "waiting for oponent... \n";
+            continue;
         }
-        catch(const rpc::rpc_error& e)
-        {
-            std::cerr << "RPC Error: " << e.what() << std::endl;
-        } 
+
+        std::cout << "game is starting... \n";
     }
 
     cleanup(SIGINT);

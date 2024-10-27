@@ -1,6 +1,7 @@
 #include "rpc/server.h"
 
 #include <iostream>
+#include <thread>
 #include "game.h"
 
 Game game;
@@ -14,7 +15,7 @@ int main()
     {
         std::lock_guard<std::mutex> lock(game_mutex);
         game.on_player_connect();
-        return "connected: " + std::to_string(game.players) + "/2\n";
+        return std::make_tuple<int, std::string>(game.players, "connected: " + std::to_string(game.players) + "/2\n");
     });
 
     srv.bind("disconnect", [&]() 
@@ -24,7 +25,17 @@ int main()
         return "disconnected: " + std::to_string(game.players) + "/2\n";
     });
 
-    srv.bind("perform_action", [&game](int player, const std::string& action){ return game.perform_action(player, action); });
+    srv.bind("perform_action", [&](int player, const std::string& action)
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+        return game.duel->perform_action(player, action); 
+    });
+
+    srv.bind("game_started", [&]() 
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+        return game.game_started();
+    });
 
     srv.run();
 

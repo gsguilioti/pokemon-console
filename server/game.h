@@ -4,27 +4,23 @@
 #include <cstdint>
 #include <iostream>
 #include <mutex>
+#include <tuple>
+#include <memory>
 
 #include "enums.h"
+#include "duel.h"
 
 class Game {
 public:
+    std::shared_ptr<Duel> duel;
     uint16_t players;
-    enum player currentPlayer;
 
-    Game() : currentPlayer(PLAYER_ONE) {}
-
-    enum player get_current_player() const 
-    {
-        return currentPlayer;
-    }
-
-    void end_turn() 
-    {
-        currentPlayer = (currentPlayer == PLAYER_ONE) ? PLAYER_TWO : PLAYER_ONE;
-    }
+    Game() = default;
 
     void on_player_connect();
     void on_player_disconnect();
-    std::string perform_action(int player, const std::string& action);
+    bool game_started() { return players >= 2; };
+
+private:
+    void start();
 };
