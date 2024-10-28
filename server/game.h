@@ -19,8 +19,9 @@ public:
 
     void on_player_connect();
     void on_player_disconnect();
-    bool game_started() { return players >= 2; };
+    int get_state(){ return state; };
 
 private:
     void start();
+    int state = GAME_WAITING;
 };
