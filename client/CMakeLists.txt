@@ -6,6 +6,8 @@ set(RPCLIB_LIBRARY_DIR "$ENV{HOME}/rpclib/build")
 
 include_directories(${RPCLIB_INCLUDE_DIR})
 
-add_executable(client main.cpp)
+find_package(nlohmann_json REQUIRED)
 
-target_link_libraries(client PRIVATE ${RPCLIB_LIBRARY_DIR}/librpc.a)
+add_executable(client main.cpp game.cpp duel.cpp player.cpp)
+
+target_link_libraries(client PRIVATE ${RPCLIB_LIBRARY_DIR}/librpc.a nlohmann_json::nlohmann_json)

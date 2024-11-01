@@ -6,8 +6,6 @@
 #include <mutex>
 #include <tuple>
 #include <memory>
-#include <vector>
-#include <algorithm>
 
 #include "enums.h"
 #include "duel.h"
@@ -15,17 +13,11 @@
 
 class Game {
 public:
-    uint16_t numPlayers = 0;
-    std::shared_ptr<Duel> duel;
-    std::vector<Player> players;
-
     Game() = default;
+    std::shared_ptr<Duel> duel;
+    std::shared_ptr<Player> player;
 
-    void on_player_connect();
-    void on_player_disconnect(int id);
-    int get_state(){ return state; };
-
-private:
     void start();
+private:
     int state = GAME_WAITING;
 };

@@ -15,14 +15,14 @@ int main()
     {
         std::lock_guard<std::mutex> lock(game_mutex);
         game.on_player_connect();
-        return std::make_tuple<int, std::string>(game.players, "connected: " + std::to_string(game.players) + "/2\n");
+        return std::make_tuple<int, std::string>(game.numPlayers, "connected: " + std::to_string(game.numPlayers) + "/2\n");
     });
 
-    srv.bind("disconnect", [&]() 
+    srv.bind("disconnect", [&](int id) 
     {
         std::lock_guard<std::mutex> lock(game_mutex);
-        game.on_player_disconnect();
-        return "disconnected: " + std::to_string(game.players) + "/2\n";
+        game.on_player_disconnect(id);
+        return "disconnected: " + std::to_string(game.numPlayers) + "/2\n";
     });
 
     srv.bind("get_state", [&]()
