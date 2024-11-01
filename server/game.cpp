@@ -20,7 +20,7 @@ void Game::on_player_disconnect(int id)
 {
     players.erase(std::remove_if(players.begin(), players.end(),
                                  [id](Player& player) {
-                                     return player.getId() == id;
+                                     return player.get_id() == id;
                                  }),
                   players.end());
     numPlayers--;
@@ -35,6 +35,5 @@ void Game::start()
     while(1)
     {
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        std::cout << "inside the game loop\n";
     }
 }

@@ -1,10 +1,10 @@
+#include "rpc/client.h"
+#include "rpc/rpc_error.h"
+
 #include <iostream>
 #include <csignal>
 #include <thread>
 #include <chrono>
-
-#include "rpc/client.h"
-#include "rpc/rpc_error.h"
 
 #include "enums.h"
 #include "game.h"
@@ -43,10 +43,17 @@ int main()
             case GAME_CHOOSE_STARTER:
                 break;
             default:
-                std::cout<< "Game State Error. Exiting...\n";
+                std::cout<< "game state error. exiting...\n";
                 cleanup(SIGINT);
         }
+
+        if (state == GAME_CHOOSE_STARTER)
+            break;
     }
+
+    auto pokemons = client.call("start_pokebag", game.player->getId()).as<std::vector<Pokemon>>();
+    if(!pokemons.empty())
+        game.player->pokemons = pokemons;
 
     game.start();
 

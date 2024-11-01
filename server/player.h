@@ -5,15 +5,17 @@
 #include <vector>
 
 #include "enums.h"
+#include "pokemon.h"
 
 class Player {
 public:
     Player(uint16_t id): m_id{id}
     {};
 
-    std::vector<int> pokemons;
+    std::vector<Pokemon> pokemons;
 
-    uint16_t getId() { return m_id; };
+    uint16_t get_id() { return m_id; };
+    std::vector<Pokemon> start_pokebag();
     
 private:
     uint16_t m_id;

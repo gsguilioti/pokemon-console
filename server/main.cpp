@@ -31,6 +31,20 @@ int main()
         return game.get_state(); 
     });
 
+    srv.bind("start_pokebag", [&](int id)
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+
+        auto player = std::find_if(game.players.begin(), game.players.end(),
+                           [id](Player& player) {
+                               return player.get_id() == id;
+                           });
+        if(player != game.players.end())
+            return player->start_pokebag(); 
+        
+        return std::vector<Pokemon>();
+    });
+
     srv.bind("perform_action", [&](int player, const std::string& action)
     {
         std::lock_guard<std::mutex> lock(game_mutex);
