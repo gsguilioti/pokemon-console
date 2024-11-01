@@ -20,7 +20,7 @@ int main()
 {
     std::signal(SIGINT, cleanup);
 
-    enum player player;
+    int player = 0;
     std::tuple<int, std::string> response = client.call("connect").as<std::tuple<int, std::string>>();
     std::cout << std::get<1>(response) << std::endl;
     player = std::get<0>(response);
@@ -28,15 +28,20 @@ int main()
     while (true) 
     {
         std::this_thread::sleep_for(std::chrono::seconds(1));
-        bool started = client.call("game_started").as<bool>();
-        if(!started)
-        {
-            player = PLAYER_ONE;
-            std::cout << "waiting for oponent... \n";
-            continue;
-        }
+        int state = client.call("get_state").as<int>();
 
-        std::cout << "game is starting... \n";
+        switch (state)
+        {
+            case GAME_WAITING:
+                player = PLAYER_ONE;
+                std::cout << "waiting for oponent... \n";
+                continue;
+            case GAME_CHOOSE_STARTER:
+                std::cout << "game is starting... \n";
+                break;
+            default:
+                break;
+        }
     }
 
     cleanup(SIGINT);

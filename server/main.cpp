@@ -25,16 +25,16 @@ int main()
         return "disconnected: " + std::to_string(game.players) + "/2\n";
     });
 
+    srv.bind("get_state", [&]()
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+        return game.get_state(); 
+    });
+
     srv.bind("perform_action", [&](int player, const std::string& action)
     {
         std::lock_guard<std::mutex> lock(game_mutex);
         return game.duel->perform_action(player, action); 
-    });
-
-    srv.bind("game_started", [&]() 
-    {
-        std::lock_guard<std::mutex> lock(game_mutex);
-        return game.game_started();
     });
 
     srv.run();
