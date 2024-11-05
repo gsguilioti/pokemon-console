@@ -29,7 +29,7 @@ void Game::on_player_disconnect(int id)
 
 void Game::start()
 {
-    this->duel = std::make_shared<Duel>();
+    this->duel = std::make_shared<Duel>(players[0], players[1]);
     std::cout << "the game started\n";
     this->state = GAME_CHOOSE_STARTER;
     while(1)
