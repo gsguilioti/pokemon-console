@@ -1,0 +1,24 @@
+{
+    "moves": [
+        {
+            "id": 1,
+            "name": "Tackle",
+            "power": 5
+        },
+        {
+            "id": 2,
+            "name": "Vine Whip",
+            "power": 6
+        },
+        {
+            "id": 3,
+            "name": "Ember",
+            "power": 7
+        },
+        {
+            "id": 4,
+            "name": "Bubble",
+            "power": 4
+        }
+    ]
+}

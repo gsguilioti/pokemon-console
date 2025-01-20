@@ -3,12 +3,19 @@
 #include <string>
 
 #include "enums.h"
+#include "player.h"
 
 class Duel {
 public:
     enum player currentTurn;
+    std::shared_ptr<Player> playerOne;
+    std::shared_ptr<Player> playerTwo;
 
-    Duel() : currentTurn(PLAYER_ONE) {}
+    Duel(Player one, Player two) : 
+        currentTurn(PLAYER_ONE), 
+        playerOne(std::make_shared<Player>(one)),
+        playerTwo(std::make_shared<Player>(two)) 
+    {}
 
     enum player get_current_turn() const 
     {
