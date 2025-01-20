@@ -55,3 +55,10 @@ std::vector<Pokemon> Player::start_pokebag()
 
     return pokemons;
 }
+
+int Player::choose_starter(int starterPos)
+{
+    this->starterPos = starterPos -1;
+    this->set_starter_choosen();
+    return 1;
+}

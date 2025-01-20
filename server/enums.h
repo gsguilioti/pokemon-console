@@ -10,4 +10,5 @@ enum game_states
 {
     GAME_WAITING = 1,
     GAME_CHOOSE_STARTER,
+    GAME_DUEL,
 };

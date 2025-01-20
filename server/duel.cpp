@@ -8,3 +8,12 @@ std::string Duel::perform_action(int turn, const std::string& action)
 
     return "Unknown action!";
 }
+
+void Duel::start()
+{
+    std::cout << "duel started\n";
+    while(1)
+    {
+        
+    }
+}

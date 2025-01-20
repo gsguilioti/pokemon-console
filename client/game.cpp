@@ -3,7 +3,7 @@
 #include <thread>
 #include <chrono>
 
-void Game::start()
+void Game::start(rpc::client& client)
 {
     this->duel = std::make_shared<Duel>();
     std::cout << "the game started\n";
@@ -15,4 +15,6 @@ void Game::start()
 
     int starter;
     std::cin >> starter;
+
+    client.call("choose_starter", this->player->getId(), starter);
 }

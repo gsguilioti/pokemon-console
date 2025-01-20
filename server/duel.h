@@ -20,12 +20,14 @@ public:
     enum player get_current_turn() const 
     {
         return currentTurn;
-    }
+    };
 
     void end_turn() 
     {
         currentTurn = (currentTurn == PLAYER_ONE) ? PLAYER_TWO : PLAYER_ONE;
-    }
+    };
+
+    void start();
 
     std::string perform_action(int player, const std::string& action);
 };

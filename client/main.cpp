@@ -55,7 +55,15 @@ int main()
     if(!pokemons.empty())
         game.player->pokemons = pokemons;
 
-    game.start();
+    game.start(client);
+
+    while(client.call("get_state").as<int>() != GAME_DUEL)
+    {
+        std::cout << "waiting for oponent... \n";
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+    }
+
+    std::cout << "duel started. \n";
 
     return 0;
 }
