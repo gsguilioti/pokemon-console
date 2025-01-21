@@ -29,15 +29,17 @@ void Game::on_player_disconnect(int id)
 
 void Game::start()
 {
-    this->duel = std::make_shared<Duel>(players[0], players[1]);
     std::cout << "the game started\n";
     this->state = GAME_CHOOSE_STARTER;
-    while(!(this->players[0].get_starter_status()) && !(this->players[1].get_starter_status()))
+    while(1)
     {
+        if(this->players[0].get_starter_status() && this->players[1].get_starter_status())
+            break;
         std::cout << "waiting for both players to start the duel...\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
 
-    this->state = GAME_DUEL;
+    this->duel = std::make_shared<Duel>(players[0], players[1]);
     this->duel->start();
+    this->state = GAME_DUEL;
 }

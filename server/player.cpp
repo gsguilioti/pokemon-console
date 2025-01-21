@@ -53,6 +53,8 @@ std::vector<Pokemon> Player::start_pokebag()
     for (size_t i = 0; i < 3 && i < allPokemons.size(); ++i)
         pokemons.push_back(allPokemons[i]);
 
+    std::cout << "pokebag filled\n";
+
     return pokemons;
 }
 
@@ -60,5 +62,6 @@ int Player::choose_starter(int starterPos)
 {
     this->starterPos = starterPos -1;
     this->set_starter_choosen();
+    std::cout << "starter choosed\n";
     return 1;
 }
