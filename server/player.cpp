@@ -81,3 +81,16 @@ void Player::execute_shift(int option)
 
     this->set_duel_action(false);
 }
+
+void Player::execute_battle(int option, std::shared_ptr<Pokemon> enemy)
+{
+    if(!this->get_duel_action())
+        return;
+        
+    auto active = this->get_active_pokemon();
+    auto move = active->get_moves()[option -1];
+
+    int damage = (active->get_atk() + (move.get_power() * 2) - enemy->get_def());
+    std::cout << "player: " << this->get_id() << " deals " << damage << "damage fom enemy\n";
+    enemy->set_health(enemy->get_health() - damage);
+}

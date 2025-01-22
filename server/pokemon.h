@@ -12,8 +12,19 @@ public:
     Pokemon(int num, const std::string& name, int health, int attack, int defense, int speed, const std::vector<Move>& moves)
         : num(num), name(name), health(health), atk(attack), def(defense), spd(speed), moves(moves) {}
     Pokemon() = default;
-    uint16_t get_num(){ return num; };
-    uint16_t get_spd() const { return spd; };
+
+    bool operator==(const Pokemon& other) const {
+        return this->get_num() == other.get_num();
+    }
+
+    uint16_t get_num() const { return num; };
+    uint16_t get_spd() { return spd; };
+    uint16_t get_atk() { return atk; };
+    uint16_t get_def() { return def; };
+    uint16_t get_health() { return health; };
+    std::vector<Move> get_moves() const { return moves; };
+
+    void set_health(int value) { health = value; };
 
     MSGPACK_DEFINE(num, name, health, atk, def, spd, moves);
 private:

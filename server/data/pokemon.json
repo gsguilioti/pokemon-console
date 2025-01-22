@@ -3,7 +3,7 @@
         {
             "num": 1,
             "name": "Bulbasaur",
-            "health": 10,
+            "health": 30,
             "attack": 10,
             "defense": 10,
             "speed": 5,
@@ -12,7 +12,7 @@
         {
             "num": 2,
             "name": "Charmander",
-            "health": 10,
+            "health": 30,
             "attack": 10,
             "defense": 5,
             "speed": 10,
@@ -21,10 +21,10 @@
         {
             "num": 3,
             "name": "Squirtle",
-            "health": 15,
-            "attack": 5,
-            "defense": 10,
-            "speed": 5,
+            "health": 30,
+            "attack": 7,
+            "defense": 15,
+            "speed": 3,
             "moves": [ 1, 4]
         }
     ]

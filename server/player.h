@@ -34,6 +34,7 @@ public:
     void set_action(Action act) { action = act; };
 
     void execute_shift(int option);
+    void execute_battle(int option, std::shared_ptr<Pokemon> enemy);
     
 private:
     uint16_t m_id;

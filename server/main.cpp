@@ -93,6 +93,11 @@ int main()
         return 1;
     });
 
+    srv.bind("get_duel_info", [&]()
+    {
+    
+    });
+
     srv.run();
 
     return 0;

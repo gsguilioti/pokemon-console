@@ -10,6 +10,8 @@ public:
         : id(id), name(name), power(power) {}
     Move() = default;
 
+    uint16_t get_power() const { return power; };
+
     MSGPACK_DEFINE(id, name, power);
 private:
     uint16_t id;
