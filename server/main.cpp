@@ -55,7 +55,7 @@ int main()
                            });
         if(player != game.players.end())
         {
-            auto pokemon = (*player)->getActivePokemon();
+            auto pokemon = (*player)->get_active_pokemon();
             if(pokemon == nullptr)
                 std::cout << "invalid pokemon\n";
 

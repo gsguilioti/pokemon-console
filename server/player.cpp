@@ -65,3 +65,19 @@ int Player::choose_starter(int starterPos)
     std::cout << "starter choosed\n";
     return 1;
 }
+
+void Player::execute_shift(int option)
+{
+    int index = 0;
+    auto active = std::find(pokemons.begin(), pokemons.end(), *this->get_active_pokemon());
+
+    if (active != pokemons.end())
+        index = std::distance(pokemons.begin(), active);
+
+    if((option -1) == index)
+        return;
+
+    this->set_active_pokemon(this->pokemons[option-1]);
+
+    this->set_duel_action(false);
+}

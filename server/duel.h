@@ -16,4 +16,5 @@ public:
     {}
 
     void start();
+    void execute_battle();
 };

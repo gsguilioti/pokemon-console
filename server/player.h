@@ -24,14 +24,16 @@ public:
     bool get_starter_status(){ return hasChoosenStarter; };
     void set_starter_choosen() { hasChoosenStarter = true; };
 
-    void setActivePokemon(Pokemon& pokemon) { activePokemon = std::make_shared<Pokemon>(pokemon); };
-    std::shared_ptr<Pokemon> getActivePokemon() { return activePokemon; };
+    void set_active_pokemon(Pokemon& pokemon) { activePokemon = std::make_shared<Pokemon>(pokemon); };
+    std::shared_ptr<Pokemon> get_active_pokemon() { return activePokemon; };
 
     bool get_duel_action(){ return hasMadeDuelAction; };
     void set_duel_action(bool yn) { hasMadeDuelAction = yn; };
 
     Action get_action() { return action; };
     void set_action(Action act) { action = act; };
+
+    void execute_shift(int option);
     
 private:
     uint16_t m_id;

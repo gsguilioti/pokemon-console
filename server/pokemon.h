@@ -13,6 +13,7 @@ public:
         : num(num), name(name), health(health), atk(attack), def(defense), spd(speed), moves(moves) {}
     Pokemon() = default;
     uint16_t get_num(){ return num; };
+    uint16_t get_spd() const { return spd; };
 
     MSGPACK_DEFINE(num, name, health, atk, def, spd, moves);
 private:
