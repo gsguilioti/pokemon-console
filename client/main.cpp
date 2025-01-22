@@ -41,29 +41,64 @@ int main()
                 std::this_thread::sleep_for(std::chrono::seconds(3));
                 continue;
             case GAME_CHOOSE_STARTER:
+                {
+                    auto pokemons = client.call("start_pokebag", game.player->getId()).as<std::vector<Pokemon>>();
+                    if(!pokemons.empty())
+                        game.player->pokemons = pokemons;
+
+                    game.start(client);
+                    while(state = client.call("get_state").as<int>() == GAME_CHOOSE_STARTER)
+                    {
+                        std::cout << "waiting for oponent... \n";
+                        std::this_thread::sleep_for(std::chrono::seconds(3));
+                    }
+                }
+                std::cout << "duel started. \n";
                 break;
+            case GAME_DUEL:
+                {
+                    std::cout << "what you want to do? \n 1. Battle \n 2. Pokemon \n";
+                    int action;
+                    std::cin >> action;
+
+                    if(action == 1)
+                    {
+                        auto receivedPokemon = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
+                        std::shared_ptr<Pokemon> pokemon = std::make_shared<Pokemon>(receivedPokemon);
+                        if(pokemon == nullptr)
+                            std::cout << "pokemon nao chegou\n";
+                        int count = 1;
+                        for(auto move: pokemon->get_moves())
+                        {
+                            std::cout << count++ << "." << move.get_name() << "\n";
+                        }
+                    }
+                    else
+                    {
+                        auto receivedPokemon = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
+                        std::shared_ptr<Pokemon> activePokemon = std::make_shared<Pokemon>(receivedPokemon);
+                        if(activePokemon == nullptr)
+                            std::cout << "pokemon nao chegou\n";
+                        int count = 1;
+                        for(auto pokemon: game.player->pokemons)
+                        {
+                            if(pokemon.get_num() == activePokemon->get_num())
+                                continue;
+                            std::cout << count++ << "." << pokemon.get_name() << "\n";
+                        }
+                    }
+
+                    int option;
+                    std::cin >> option;
+
+                    client.call("action", game.player->getId(), action, option).as<int>();
+                }
+                continue;
             default:
                 std::cout<< "game state error. exiting...\n";
                 cleanup(SIGINT);
         }
-
-        if (state == GAME_CHOOSE_STARTER)
-            break;
     }
-
-    auto pokemons = client.call("start_pokebag", game.player->getId()).as<std::vector<Pokemon>>();
-    if(!pokemons.empty())
-        game.player->pokemons = pokemons;
-
-    game.start(client);
-
-    while(client.call("get_state").as<int>() != GAME_DUEL)
-    {
-        std::cout << "waiting for oponent... \n";
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-    }
-
-    std::cout << "duel started. \n";
 
     return 0;
 }

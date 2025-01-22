@@ -1,11 +1,6 @@
 #include <mutex>
 #include "duel.h"
 
-std::string Duel::perform_action(int turn, const std::string& action)
-{
-    return "Unknown action!";
-}
-
 void Duel::start()
 {
     std::cout << "duel started\n";
@@ -15,11 +10,10 @@ void Duel::start()
     std::cout << "player one active: " << playerOne->getActivePokemon()->get_num() << "\n";
     std::cout << "player two active: " << playerTwo->getActivePokemon()->get_num() << "\n";
 
-    while(1)
+    while(!(this->playerOne->get_duel_action() && this->playerTwo->get_duel_action()))
     {
-        if(!(this->playerOne->get_duel_action()) &&  !(this->playerTwo->get_duel_action()))
-            continue;
 
-        break;
     }
+
+    std::cout << "both players made an action\n";
 }

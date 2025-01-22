@@ -6,6 +6,7 @@
 
 #include "enums.h"
 #include "pokemon.h"
+#include "action.h"
 
 class Player {
 public:
@@ -28,6 +29,9 @@ public:
 
     bool get_duel_action(){ return hasMadeDuelAction; };
     void set_duel_action(bool yn) { hasMadeDuelAction = yn; };
+
+    Action get_action() { return action; };
+    void set_action(Action act) { action = act; };
     
 private:
     uint16_t m_id;
@@ -36,4 +40,5 @@ private:
 
     std::shared_ptr<Pokemon> activePokemon = nullptr;
     bool hasMadeDuelAction = false;
+    Action action;
 };

@@ -36,32 +36,61 @@ int main()
         std::lock_guard<std::mutex> lock(game_mutex);
 
         auto player = std::find_if(game.players.begin(), game.players.end(),
-                           [id](Player& player) {
-                               return player.get_id() == id;
+                           [id](std::shared_ptr<Player>& player) {
+                               return player->get_id() == id;
                            });
         if(player != game.players.end())
-            return player->start_pokebag(); 
+            return (*player)->start_pokebag(); 
         
         return std::vector<Pokemon>();
+    });
+
+    srv.bind("get_active_pokemon", [&](int id)
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+
+        auto player = std::find_if(game.players.begin(), game.players.end(),
+                           [id](std::shared_ptr<Player>& player) {
+                               return player->get_id() == id;
+                           });
+        if(player != game.players.end())
+        {
+            auto pokemon = (*player)->getActivePokemon();
+            if(pokemon == nullptr)
+                std::cout << "invalid pokemon\n";
+
+            return *pokemon;
+        }
+        
+        return Pokemon();
     });
 
     srv.bind("choose_starter", [&](int id, int starterPos)
     {
         std::lock_guard<std::mutex> lock(game_mutex);
         auto player = std::find_if(game.players.begin(), game.players.end(),
-                           [id](Player& player) {
-                               return player.get_id() == id;
+                           [id](std::shared_ptr<Player>& player) {
+                               return player->get_id() == id;
                            });
         if(player == game.players.end())
             return 0;
 
-        return player->choose_starter(starterPos);
+        return (*player)->choose_starter(starterPos);
     });
 
-    srv.bind("perform_action", [&](int player, const std::string& action)
+    srv.bind("action", [&](int id, int action, int option)
     {
         std::lock_guard<std::mutex> lock(game_mutex);
-        return game.duel->perform_action(player, action); 
+        auto player = std::find_if(game.players.begin(), game.players.end(),
+                           [id](std::shared_ptr<Player>& player) {
+                               return player->get_id() == id;
+                           });
+        if(player == game.players.end())
+            return 0;
+
+        (*player)->set_action({action, option});
+        (*player)->set_duel_action(true);
+        return 1;
     });
 
     srv.run();

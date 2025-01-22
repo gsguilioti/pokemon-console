@@ -8,6 +8,6 @@ include_directories(${RPCLIB_INCLUDE_DIR})
 
 find_package(nlohmann_json REQUIRED)
 
-add_executable(server main.cpp game.cpp duel.cpp player.cpp pokemon.cpp move.cpp)
+add_executable(server main.cpp game.cpp duel.cpp player.cpp pokemon.cpp move.cpp action.cpp)
 
 target_link_libraries(server PRIVATE ${RPCLIB_LIBRARY_DIR}/librpc.a nlohmann_json::nlohmann_json)

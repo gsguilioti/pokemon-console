@@ -17,7 +17,7 @@ class Game {
 public:
     uint16_t numPlayers = 0;
     std::shared_ptr<Duel> duel;
-    std::vector<Player> players;
+    std::vector<std::shared_ptr<Player>> players;
 
     Game() = default;
 

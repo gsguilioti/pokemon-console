@@ -12,3 +12,10 @@ enum game_states
     GAME_CHOOSE_STARTER,
     GAME_DUEL,
 };
+
+enum action : int
+{
+    NONE,
+    MOVE,
+    SHIFT,
+};

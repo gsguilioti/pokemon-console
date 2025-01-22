@@ -10,6 +10,8 @@ public:
         : id(id), name(name), power(power) {}
     Move() = default;
 
+    std::string get_name(){ return name; };
+
     MSGPACK_DEFINE(id, name, power);
 private:
     uint16_t id;

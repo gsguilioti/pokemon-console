@@ -15,6 +15,8 @@ public:
     uint16_t get_num(){ return num; };
     std::string get_name(){ return name; };
 
+    const std::vector<Move>& get_moves() { return moves; };
+
     MSGPACK_DEFINE(num, name, health, atk, def, spd, moves);
 private:
     uint16_t num;

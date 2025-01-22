@@ -10,12 +10,10 @@ public:
     std::shared_ptr<Player> playerOne;
     std::shared_ptr<Player> playerTwo;
 
-    Duel(Player one, Player two) : 
-        playerOne(std::make_shared<Player>(one)),
-        playerTwo(std::make_shared<Player>(two)) 
+    Duel(std::shared_ptr<Player> one, std::shared_ptr<Player> two) : 
+        playerOne(one),
+        playerTwo(two) 
     {}
 
     void start();
-
-    std::string perform_action(int player, const std::string& action);
 };
