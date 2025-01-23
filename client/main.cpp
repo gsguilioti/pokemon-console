@@ -50,13 +50,27 @@ int main()
                     while(state = client.call("get_state").as<int>() == GAME_CHOOSE_STARTER)
                     {
                         std::cout << "waiting for oponent... \n";
-                        std::this_thread::sleep_for(std::chrono::seconds(3));
+                        std::this_thread::sleep_for(std::chrono::seconds(1));
                     }
                 }
                 std::cout << "duel started. \n";
                 break;
             case GAME_DUEL:
                 {
+                    system("clear");
+                    auto enemy = client.call("get_enemy_pokemon", game.player->getId()).as<Pokemon>();
+                    std::shared_ptr<Pokemon> enemyPokemon = std::make_shared<Pokemon>(enemy);
+                    std::cout << "Enemy: " << enemyPokemon->get_name() << "\n";
+                    std::cout << "Health: " << enemyPokemon->get_health() << "\n";
+
+                    std::cout << "\n      X \n\n";
+
+                    auto your = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
+                    std::shared_ptr<Pokemon> yourPokemon = std::make_shared<Pokemon>(your);
+                    std::cout << "Your: " << yourPokemon->get_name() << "\n";
+                    std::cout << "Health: " << yourPokemon->get_health() << "\n";
+
+                    std::cout << "\n----------------------------------------------- \n";
                     std::cout << "what you want to do? \n 1. Battle \n 2. Pokemon \n";
                     int action;
                     std::cin >> action;
@@ -67,18 +81,22 @@ int main()
                         std::shared_ptr<Pokemon> pokemon = std::make_shared<Pokemon>(receivedPokemon);
                         if(pokemon == nullptr)
                             std::cout << "pokemon nao chegou\n";
+
+                        std::cout << "\n0. Back\n";
                         int count = 1;
                         for(auto move: pokemon->get_moves())
                         {
                             std::cout << count++ << "." << move.get_name() << "\n";
                         }
                     }
-                    else
+                    else if(action == 2)
                     {
                         auto receivedPokemon = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
                         std::shared_ptr<Pokemon> activePokemon = std::make_shared<Pokemon>(receivedPokemon);
                         if(activePokemon == nullptr)
                             std::cout << "pokemon nao chegou\n";
+
+                        std::cout << "\n0. Back\n";
                         int count = 1;
                         for(auto pokemon: game.player->pokemons)
                         {
@@ -94,7 +112,12 @@ int main()
                     int option;
                     std::cin >> option;
 
+                    if(option == 0)
+                        continue;
+
                     client.call("action", game.player->getId(), action, option).as<int>();
+                    //todo: describe actions
+                    //todo: fix update before the enemy action
                 }
                 continue;
             default:

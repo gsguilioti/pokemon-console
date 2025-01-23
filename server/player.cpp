@@ -95,5 +95,7 @@ void Player::execute_battle(int option, std::shared_ptr<Pokemon> enemy)
     std::cout << "player: " << this->get_id() << " deals " << damage << " damage to enemy\n";
     enemy->set_health(enemy->get_health() - damage);
 
+    //todo: pokemon faint
+
     this->set_duel_action(false);
 }

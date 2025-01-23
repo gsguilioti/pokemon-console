@@ -65,6 +65,26 @@ int main()
         return Pokemon();
     });
 
+    srv.bind("get_enemy_pokemon", [&](int id)
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+
+        auto player = std::find_if(game.players.begin(), game.players.end(),
+                           [id](std::shared_ptr<Player>& player) {
+                               return player->get_id() != id;
+                           });
+        if(player != game.players.end())
+        {
+            auto pokemon = (*player)->get_active_pokemon();
+            if(pokemon == nullptr)
+                std::cout << "invalid pokemon\n";
+
+            return *pokemon;
+        }
+        
+        return Pokemon();
+    });
+
     srv.bind("choose_starter", [&](int id, int starterPos)
     {
         std::lock_guard<std::mutex> lock(game_mutex);
@@ -91,11 +111,6 @@ int main()
         (*player)->set_action({action, option});
         (*player)->set_duel_action(true);
         return 1;
-    });
-
-    srv.bind("get_duel_info", [&]()
-    {
-    
     });
 
     srv.run();
