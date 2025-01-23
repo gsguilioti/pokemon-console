@@ -84,7 +84,7 @@ int main()
                         {
                             if(pokemon.get_num() == activePokemon->get_num())
                             {
-                                std::cout << count++ << count++ << "." << pokemon.get_name() << "*\n";
+                                std::cout << count++ << "." << pokemon.get_name() << "*\n";
                                 continue;
                             }
                             std::cout << count++ << "." << pokemon.get_name() << "\n";

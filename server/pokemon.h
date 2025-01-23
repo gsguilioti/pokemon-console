@@ -17,6 +17,7 @@ public:
         return this->get_num() == other.get_num();
     }
 
+    std::string get_name() { return name; };
     uint16_t get_num() const { return num; };
     uint16_t get_spd() { return spd; };
     uint16_t get_atk() { return atk; };
