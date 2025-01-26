@@ -57,6 +57,10 @@ void draw_duel()
         }
     }
 
+    std::cout << client.call("get_duel_message").as<std::string>() << "\n";
+
+    std::cout << "\n----------------------------------------------- \n";
+
     std::cout << "Enemy: " << enemyPokemon->get_name() << "\n";
     std::cout << "Health: " << enemyPokemon->get_health() << "\n";
 
@@ -154,8 +158,6 @@ int main()
 
                     std::cout << "waiting for enemy." << std::flush;
                     while(!client.call("get_players_actions").as<bool>());
-
-                    //todo: describe actions
                 }
                 continue;
             default:

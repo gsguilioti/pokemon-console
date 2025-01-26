@@ -37,6 +37,14 @@ int main()
         return (!(game.players[0]->get_duel_action()) && !(game.players[1]->get_duel_action()));
     });
 
+    srv.bind("get_duel_message", [&]()
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+        std::string message = game.duel->message;
+
+        return message;
+    });
+
     srv.bind("start_pokebag", [&](int id)
     {
         std::lock_guard<std::mutex> lock(game_mutex);

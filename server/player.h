@@ -33,8 +33,8 @@ public:
     Action get_action() { return action; };
     void set_action(Action act) { action = act; };
 
-    void execute_shift(int option);
-    void execute_battle(int option, std::shared_ptr<Pokemon> enemy);
+    std::string execute_shift(int option);
+    std::string execute_battle(int option, std::shared_ptr<Pokemon> enemy);
     int pokemon_faint(int index);
     
 private:

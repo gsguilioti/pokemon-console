@@ -17,4 +17,6 @@ public:
 
     void start();
     void execute_battle();
+
+    std::string message;
 };

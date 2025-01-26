@@ -66,7 +66,7 @@ int Player::choose_starter(int starterPos)
     return 1;
 }
 
-void Player::execute_shift(int option)
+std::string Player::execute_shift(int option)
 {
     int index = 0;
     auto active = std::find(pokemons.begin(), pokemons.end(), *this->get_active_pokemon());
@@ -75,27 +75,36 @@ void Player::execute_shift(int option)
         index = std::distance(pokemons.begin(), active);
 
     if((option -1) == index)
-        return;
+        return "";
 
-    std::cout << "player: " << this->get_id() << " changed " << active->get_name() << " to" << this->pokemons[option-1].get_name() << "\n";
+    std::cout << "player: " << this->get_id() << " changed " << active->get_name() << " to " << this->pokemons[option-1].get_name() << "\n";
+    std::string message = "Player " + std::to_string(this->get_id()) + " shifted " +  active->get_name() + " to " + this->pokemons[option - 1].get_name() + "\n";
     this->set_active_pokemon(this->pokemons[option-1]);
 
     this->set_duel_action(false);
+
+    return message;
 }
 
-void Player::execute_battle(int option, std::shared_ptr<Pokemon> enemy)
+std::string Player::execute_battle(int option, std::shared_ptr<Pokemon> enemy)
 {
     if(!this->get_duel_action())
-        return;
+        return "";
         
     auto active = this->get_active_pokemon();
     auto move = active->get_moves()[option -1];
 
     int damage = (active->get_atk() + (move.get_power() * 2) - enemy->get_def());
-    std::cout << "player: " << this->get_id() << " deals " << damage << " damage to enemy\n";
+    std::cout << "player: " << this->get_id() << " dealt " << damage << " damage to enemy\n";
     enemy->set_health(enemy->get_health() - damage);
 
+    std::string message = "Player " + std::to_string(this->get_id()) + " dealt " + std::to_string(damage) + " damage to " + this->pokemons[option - 1].get_name() + "\n";
+    if(enemy->get_health() <= 0)
+        message += enemy->get_name() + " fainted.\n";
+
     this->set_duel_action(false);
+
+    return message;
 }
 
 int Player::pokemon_faint(int index)
@@ -109,7 +118,7 @@ int Player::pokemon_faint(int index)
     if((index -1) == faint)
         return 0;
 
-    std::cout << "player: " << this->get_id() << " send " << this->pokemons[index-1].get_name() << "\n";
+    std::cout << "player: " << this->get_id() << " sent " << this->pokemons[index-1].get_name() << "\n";
     this->set_active_pokemon(this->pokemons[index-1]);
 
     return 1;

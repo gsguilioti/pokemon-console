@@ -15,11 +15,13 @@ void Duel::start()
         if(!(this->playerOne->get_duel_action() && this->playerTwo->get_duel_action()))
             continue;
 
+        this->message = "";
+
         if(this->playerOne->get_action().get_action() == SHIFT)
-            this->playerOne->execute_shift(this->playerOne->get_action().get_option());
+            this->message += this->playerOne->execute_shift(this->playerOne->get_action().get_option());
 
         if(this->playerTwo->get_action().get_action() == SHIFT)
-            this->playerTwo->execute_shift(this->playerTwo->get_action().get_option());
+            this->message += this->playerTwo->execute_shift(this->playerTwo->get_action().get_option());
 
         if(this->playerOne->get_duel_action() || this->playerTwo->get_duel_action())
             this->execute_battle();
@@ -38,12 +40,12 @@ void Duel::execute_battle()
     });
     if (pokemons[0] == playerOne->get_active_pokemon()) 
     {
-        this->playerOne->execute_battle(this->playerOne->get_action().get_option(), this->playerTwo->get_active_pokemon());
-        this->playerTwo->execute_battle(this->playerTwo->get_action().get_option(), this->playerOne->get_active_pokemon());
+        this->message += this->playerOne->execute_battle(this->playerOne->get_action().get_option(), this->playerTwo->get_active_pokemon());
+        this->message += this->playerTwo->execute_battle(this->playerTwo->get_action().get_option(), this->playerOne->get_active_pokemon());
     }
     else
     {
-        this->playerTwo->execute_battle(this->playerTwo->get_action().get_option(), this->playerOne->get_active_pokemon());
-        this->playerOne->execute_battle(this->playerOne->get_action().get_option(), this->playerTwo->get_active_pokemon());
+        this->message += this->playerTwo->execute_battle(this->playerTwo->get_action().get_option(), this->playerOne->get_active_pokemon());
+        this->message += this->playerOne->execute_battle(this->playerOne->get_action().get_option(), this->playerTwo->get_active_pokemon());
     }
 }
