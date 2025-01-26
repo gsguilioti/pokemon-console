@@ -13,7 +13,8 @@
 #include "duel.h"
 #include "player.h"
 
-class Game {
+class Game
+{
 public:
     uint16_t numPlayers = 0;
     std::shared_ptr<Duel> duel;

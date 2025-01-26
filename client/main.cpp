@@ -21,6 +21,53 @@ void cleanup(int signum)
     exit(signum);
 }
 
+void draw_duel()
+{
+    system("clear");
+    auto enemy = client.call("get_enemy_pokemon", game.player->getId()).as<Pokemon>();
+    std::shared_ptr<Pokemon> enemyPokemon = std::make_shared<Pokemon>(enemy);
+    auto your = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
+    std::shared_ptr<Pokemon> yourPokemon = std::make_shared<Pokemon>(your);
+    
+    if(yourPokemon->get_health() <= 0)
+    {
+        while(1)
+        {
+            auto receivedPokemon = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
+            std::shared_ptr<Pokemon> activePokemon = std::make_shared<Pokemon>(receivedPokemon);
+
+            system("clear");
+            std::cout << "Your pokemon died, choose the next: \n";
+
+            int count = 1;
+            for(auto pokemon: game.player->pokemons)
+            {
+                if(pokemon.get_num() == activePokemon->get_num())
+                {
+                    std::cout << count++ << "." << pokemon.get_name() << "*\n";
+                    continue;
+                }
+                std::cout << count++ << "." << pokemon.get_name() << "\n";
+            }
+
+            int index;
+            std:: cin >> index;
+            int faint = client.call("pokemon_faint", game.player->getId(), index).as<int>();
+            if(faint) break;
+        }
+    }
+
+    std::cout << "Enemy: " << enemyPokemon->get_name() << "\n";
+    std::cout << "Health: " << enemyPokemon->get_health() << "\n";
+
+    std::cout << "\n      X \n\n";
+
+    std::cout << "Your: " << yourPokemon->get_name() << "\n";
+    std::cout << "Health: " << yourPokemon->get_health() << "\n";
+
+    std::cout << "\n----------------------------------------------- \n";
+}
+
 int main() 
 {
     std::signal(SIGINT, cleanup);
@@ -57,20 +104,7 @@ int main()
                 break;
             case GAME_DUEL:
                 {
-                    system("clear");
-                    auto enemy = client.call("get_enemy_pokemon", game.player->getId()).as<Pokemon>();
-                    std::shared_ptr<Pokemon> enemyPokemon = std::make_shared<Pokemon>(enemy);
-                    std::cout << "Enemy: " << enemyPokemon->get_name() << "\n";
-                    std::cout << "Health: " << enemyPokemon->get_health() << "\n";
-
-                    std::cout << "\n      X \n\n";
-
-                    auto your = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
-                    std::shared_ptr<Pokemon> yourPokemon = std::make_shared<Pokemon>(your);
-                    std::cout << "Your: " << yourPokemon->get_name() << "\n";
-                    std::cout << "Health: " << yourPokemon->get_health() << "\n";
-
-                    std::cout << "\n----------------------------------------------- \n";
+                    draw_duel();
                     std::cout << "what you want to do? \n 1. Battle \n 2. Pokemon \n";
                     int action;
                     std::cin >> action;
@@ -116,8 +150,12 @@ int main()
                         continue;
 
                     client.call("action", game.player->getId(), action, option).as<int>();
+                    system("clear");
+
+                    std::cout << "waiting for enemy." << std::flush;
+                    while(!client.call("get_players_actions").as<bool>());
+
                     //todo: describe actions
-                    //todo: fix update before the enemy action
                 }
                 continue;
             default:

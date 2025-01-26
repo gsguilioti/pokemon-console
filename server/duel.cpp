@@ -36,7 +36,6 @@ void Duel::execute_battle()
     {
         return a->get_spd() > b->get_spd();
     });
-
     if (pokemons[0] == playerOne->get_active_pokemon()) 
     {
         this->playerOne->execute_battle(this->playerOne->get_action().get_option(), this->playerTwo->get_active_pokemon());

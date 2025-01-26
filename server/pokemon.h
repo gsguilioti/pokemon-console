@@ -22,7 +22,7 @@ public:
     uint16_t get_spd() { return spd; };
     uint16_t get_atk() { return atk; };
     uint16_t get_def() { return def; };
-    uint16_t get_health() { return health; };
+    int16_t get_health() { return health; };
     std::vector<Move> get_moves() const { return moves; };
 
     void set_health(int value) { health = value; };
@@ -31,7 +31,7 @@ public:
 private:
     uint16_t num;
     std::string name;
-    uint16_t health;
+    int16_t health;
     uint16_t atk;
     uint16_t def;
     uint16_t spd;

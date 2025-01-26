@@ -35,6 +35,7 @@ public:
 
     void execute_shift(int option);
     void execute_battle(int option, std::shared_ptr<Pokemon> enemy);
+    int pokemon_faint(int index);
     
 private:
     uint16_t m_id;

@@ -14,7 +14,7 @@ public:
     Pokemon() = default;
     uint16_t get_num(){ return num; };
     std::string get_name(){ return name; };
-    uint16_t get_health() { return health; };
+    int16_t get_health() { return health; };
 
     const std::vector<Move>& get_moves() { return moves; };
 
@@ -22,7 +22,7 @@ public:
 private:
     uint16_t num;
     std::string name;
-    uint16_t health;
+    int16_t health;
     uint16_t atk;
     uint16_t def;
     uint16_t spd;

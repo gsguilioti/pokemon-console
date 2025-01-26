@@ -31,6 +31,12 @@ int main()
         return game.get_state(); 
     });
 
+    srv.bind("get_players_actions", [&]()
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+        return (!(game.players[0]->get_duel_action()) && !(game.players[1]->get_duel_action()));
+    });
+
     srv.bind("start_pokebag", [&](int id)
     {
         std::lock_guard<std::mutex> lock(game_mutex);
@@ -111,6 +117,20 @@ int main()
         (*player)->set_action({action, option});
         (*player)->set_duel_action(true);
         return 1;
+    });
+
+    srv.bind("pokemon_faint", [&](int id, int index)
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+        auto player = std::find_if(game.players.begin(), game.players.end(),
+                           [id](std::shared_ptr<Player>& player) {
+                               return player->get_id() == id;
+                           });
+        if(player == game.players.end())
+            return 0;
+
+        int changed = (*player)->pokemon_faint(index);
+        return changed;
     });
 
     srv.run();

@@ -95,7 +95,22 @@ void Player::execute_battle(int option, std::shared_ptr<Pokemon> enemy)
     std::cout << "player: " << this->get_id() << " deals " << damage << " damage to enemy\n";
     enemy->set_health(enemy->get_health() - damage);
 
-    //todo: pokemon faint
-
     this->set_duel_action(false);
+}
+
+int Player::pokemon_faint(int index)
+{
+    auto active = std::find(pokemons.begin(), pokemons.end(), *this->get_active_pokemon());
+
+    int faint = 0;
+    if (active != pokemons.end())
+        faint = std::distance(pokemons.begin(), active);
+
+    if((index -1) == faint)
+        return 0;
+
+    std::cout << "player: " << this->get_id() << " send " << this->pokemons[index-1].get_name() << "\n";
+    this->set_active_pokemon(this->pokemons[index-1]);
+
+    return 1;
 }
