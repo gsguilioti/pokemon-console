@@ -127,6 +127,14 @@ int main()
                 break;
             case GAME_DUEL:
                 {
+                    if(client.call("duel_over").as<bool>())
+                    {
+                        auto message = client.call("end_duel_message", game.player->getId()).as<std::string>();
+                        system("clear");
+                        std::cout << message << "\n" << std::flush;
+                        exit(1);
+                    }
+
                     draw_duel();
                     std::cout << "what you want to do? \n 1. Battle \n 2. Pokemon \n";
                     int action;

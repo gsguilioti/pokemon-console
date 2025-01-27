@@ -39,7 +39,8 @@ public:
     std::string execute_shift(int option);
     std::string execute_battle(int option, std::shared_ptr<Player> enemy);
     int pokemon_faint(int index);
-    
+    bool all_pokemons_fainted() const;
+
 private:
     uint16_t m_id;
     bool hasChoosenStarter = false;

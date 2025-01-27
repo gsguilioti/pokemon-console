@@ -155,6 +155,33 @@ int main()
         return changed;
     });
 
+    srv.bind("duel_over", [&]()
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+
+        if (game.players[0]->all_pokemons_fainted() || game.players[1]->all_pokemons_fainted())
+            return true;
+
+        return false;
+    });
+
+    srv.bind("end_duel_message", [&](int playerId)
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+
+        bool playerOneLost = game.players[0]->all_pokemons_fainted();
+        bool playerTwoLost = game.players[1]->all_pokemons_fainted();
+
+        std::string message;
+
+        if (playerOneLost)
+            message = (playerId == game.players[0]->get_id()) ? "You lost the duel!" : "You won the duel!";
+         else if (playerTwoLost)
+            message = (playerId == game.players[1]->get_id()) ? "You lost the duel!" : "You won the duel!";
+
+        return message;
+    });
+
     srv.run();
 
     return 0;

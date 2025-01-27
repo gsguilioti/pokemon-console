@@ -126,3 +126,13 @@ int Player::pokemon_faint(int index)
 
     return 1;
 }
+
+bool Player::all_pokemons_fainted() const 
+{
+    for (const auto& pokemon : pokemons) {
+        if (pokemon && !pokemon->is_fainted()) {
+            return false;
+        }
+    }
+    return true; 
+}

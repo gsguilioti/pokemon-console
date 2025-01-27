@@ -28,6 +28,7 @@ public:
 
     void set_health(int value) { health = value; };
     void set_fainted() { fainted = true;};
+    bool is_fainted() { return fainted; };
 
     MSGPACK_DEFINE(num, name, health, atk, def, spd, moves, fainted);
 private:
