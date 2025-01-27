@@ -15,10 +15,11 @@ public:
     uint16_t get_num(){ return num; };
     std::string get_name(){ return name; };
     int16_t get_health() { return health; };
+    bool is_fainted() { return fainted; };
 
     const std::vector<Move>& get_moves() { return moves; };
 
-    MSGPACK_DEFINE(num, name, health, atk, def, spd, moves);
+    MSGPACK_DEFINE(num, name, health, atk, def, spd, moves, fainted);
 private:
     uint16_t num;
     std::string name;
@@ -27,4 +28,6 @@ private:
     uint16_t def;
     uint16_t spd;
     std::vector<Move> moves;
+
+    bool fainted;
 };

@@ -18,6 +18,7 @@ public:
     }
 
     std::string get_name() { return name; };
+    std::string get_name() const { return name; };
     uint16_t get_num() const { return num; };
     uint16_t get_spd() { return spd; };
     uint16_t get_atk() { return atk; };
@@ -26,8 +27,9 @@ public:
     std::vector<Move> get_moves() const { return moves; };
 
     void set_health(int value) { health = value; };
+    void set_fainted() { fainted = true;};
 
-    MSGPACK_DEFINE(num, name, health, atk, def, spd, moves);
+    MSGPACK_DEFINE(num, name, health, atk, def, spd, moves, fainted);
 private:
     uint16_t num;
     std::string name;
@@ -36,4 +38,14 @@ private:
     uint16_t def;
     uint16_t spd;
     std::vector<Move> moves;
+
+    bool fainted = false;
 };
+
+inline bool operator==(const std::shared_ptr<Pokemon>& lhs, const Pokemon& rhs) {
+    return lhs->get_num() == rhs.get_num();
+}
+
+inline bool operator==(const Pokemon& lhs, const std::shared_ptr<Pokemon>& rhs) {
+    return lhs.get_num() == rhs->get_num();
+}

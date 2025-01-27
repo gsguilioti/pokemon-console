@@ -56,7 +56,7 @@ int main()
         if(player != game.players.end())
             return (*player)->start_pokebag(); 
         
-        return std::vector<Pokemon>();
+        return std::vector<std::shared_ptr<Pokemon>>();
     });
 
     srv.bind("get_active_pokemon", [&](int id)
@@ -99,6 +99,20 @@ int main()
         return Pokemon();
     });
 
+    srv.bind("get_pokemons", [&](int id)
+    {
+        std::lock_guard<std::mutex> lock(game_mutex);
+
+        auto player = std::find_if(game.players.begin(), game.players.end(),
+                           [id](std::shared_ptr<Player>& player) {
+                               return player->get_id() == id;
+                           });
+        if(player != game.players.end())
+            return (*player)->pokemons; 
+        
+        return std::vector<std::shared_ptr<Pokemon>>();
+    });
+
     srv.bind("choose_starter", [&](int id, int starterPos)
     {
         std::lock_guard<std::mutex> lock(game_mutex);
@@ -137,7 +151,7 @@ int main()
         if(player == game.players.end())
             return 0;
 
-        int changed = (*player)->pokemon_faint(index);
+        int changed = game.duel->pokemon_faint((*player), index);
         return changed;
     });
 

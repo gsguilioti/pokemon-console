@@ -9,7 +9,7 @@
 
 using json = nlohmann::json;
 
-std::vector<Pokemon> Player::start_pokebag()
+std::vector<std::shared_ptr<Pokemon>> Player::start_pokebag()
 {
     std::ifstream pokemonFile("../data/pokemon.json");
     json pokemonData;
@@ -51,7 +51,7 @@ std::vector<Pokemon> Player::start_pokebag()
     std::shuffle(allPokemons.begin(), allPokemons.end(), g);
 
     for (size_t i = 0; i < 3 && i < allPokemons.size(); ++i)
-        pokemons.push_back(allPokemons[i]);
+        pokemons.push_back(std::make_shared<Pokemon>(allPokemons[i]));
 
     std::cout << "pokebag filled\n";
 
@@ -77,8 +77,8 @@ std::string Player::execute_shift(int option)
     if((option -1) == index)
         return "";
 
-    std::cout << "player: " << this->get_id() << " changed " << active->get_name() << " to " << this->pokemons[option-1].get_name() << "\n";
-    std::string message = "Player " + std::to_string(this->get_id()) + " shifted " +  active->get_name() + " to " + this->pokemons[option - 1].get_name() + "\n";
+    std::cout << "player: " << this->get_id() << " changed " << active->get()->get_name() << " to " << this->pokemons[option-1]->get_name() << "\n";
+    std::string message = "Player " + std::to_string(this->get_id()) + " shifted " +  active->get()->get_name() + " to " + this->pokemons[option - 1]->get_name() + "\n";
     this->set_active_pokemon(this->pokemons[option-1]);
 
     this->set_duel_action(false);
@@ -86,7 +86,7 @@ std::string Player::execute_shift(int option)
     return message;
 }
 
-std::string Player::execute_battle(int option, std::shared_ptr<Pokemon> enemy)
+std::string Player::execute_battle(int option, std::shared_ptr<Player> enemy)
 {
     if(!this->get_duel_action())
         return "";
@@ -94,13 +94,16 @@ std::string Player::execute_battle(int option, std::shared_ptr<Pokemon> enemy)
     auto active = this->get_active_pokemon();
     auto move = active->get_moves()[option -1];
 
-    int damage = (active->get_atk() + (move.get_power() * 2) - enemy->get_def());
+    int damage = (active->get_atk() + (move.get_power() * 2) - enemy->get_active_pokemon()->get_def());
     std::cout << "player: " << this->get_id() << " dealt " << damage << " damage to enemy\n";
-    enemy->set_health(enemy->get_health() - damage);
+    enemy->get_active_pokemon()->set_health(enemy->get_active_pokemon()->get_health() - damage);
 
-    std::string message = "Player " + std::to_string(this->get_id()) + " dealt " + std::to_string(damage) + " damage to " + this->pokemons[option - 1].get_name() + "\n";
-    if(enemy->get_health() <= 0)
-        message += enemy->get_name() + " fainted.\n";
+    std::string message = "Player " + std::to_string(this->get_id()) + " dealt " + std::to_string(damage) + " damage to " + this->pokemons[option - 1]->get_name() + "\n";
+    if(enemy->get_active_pokemon()->get_health() <= 0)
+    {
+        enemy->get_active_pokemon()->set_fainted();
+        message += enemy->get_active_pokemon()->get_name() + " fainted.\n";
+    }
 
     this->set_duel_action(false);
 
@@ -118,7 +121,7 @@ int Player::pokemon_faint(int index)
     if((index -1) == faint)
         return 0;
 
-    std::cout << "player: " << this->get_id() << " sent " << this->pokemons[index-1].get_name() << "\n";
+    std::cout << "player: " << this->get_id() << " sent " << this->pokemons[index-1]->get_name() << "\n";
     this->set_active_pokemon(this->pokemons[index-1]);
 
     return 1;

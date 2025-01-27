@@ -40,12 +40,28 @@ void Duel::execute_battle()
     });
     if (pokemons[0] == playerOne->get_active_pokemon()) 
     {
-        this->message += this->playerOne->execute_battle(this->playerOne->get_action().get_option(), this->playerTwo->get_active_pokemon());
-        this->message += this->playerTwo->execute_battle(this->playerTwo->get_action().get_option(), this->playerOne->get_active_pokemon());
+        this->message += this->playerOne->execute_battle(this->playerOne->get_action().get_option(), this->playerTwo);
+        this->message += this->playerTwo->execute_battle(this->playerTwo->get_action().get_option(), this->playerOne);
     }
     else
     {
-        this->message += this->playerTwo->execute_battle(this->playerTwo->get_action().get_option(), this->playerOne->get_active_pokemon());
-        this->message += this->playerOne->execute_battle(this->playerOne->get_action().get_option(), this->playerTwo->get_active_pokemon());
+        this->message += this->playerTwo->execute_battle(this->playerTwo->get_action().get_option(), this->playerOne);
+        this->message += this->playerOne->execute_battle(this->playerOne->get_action().get_option(), this->playerTwo);
+    }
+}
+
+int Duel::pokemon_faint(std::shared_ptr<Player> player, int index)
+{
+    if(player->get_id() == this->playerOne->get_id())
+    {
+        int changed = playerOne->pokemon_faint(index);
+        message += "Player " + std::to_string(playerOne->get_id()) + " sent " + playerOne->get_active_pokemon()->get_name() + "\n";
+        return changed;
+    }
+    else
+    {
+        int changed = playerTwo->pokemon_faint(index);
+        message += "Player " + std::to_string(playerTwo->get_id()) + " sent " + playerTwo->get_active_pokemon()->get_name() + "\n";
+        return changed;
     }
 }

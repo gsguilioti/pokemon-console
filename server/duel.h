@@ -17,6 +17,7 @@ public:
 
     void start();
     void execute_battle();
+    int pokemon_faint(std::shared_ptr<Player> player, int index);
 
     std::string message;
 };

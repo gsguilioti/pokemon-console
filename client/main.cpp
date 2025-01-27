@@ -28,38 +28,18 @@ void draw_duel()
     std::shared_ptr<Pokemon> enemyPokemon = std::make_shared<Pokemon>(enemy);
     auto your = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
     std::shared_ptr<Pokemon> yourPokemon = std::make_shared<Pokemon>(your);
-    
-    if(yourPokemon->get_health() <= 0)
+
+    std::cout << "waiting for enemy." << std::flush;
+    while(enemyPokemon->get_health() <= 0)
     {
-        while(1)
-        {
-            auto receivedPokemon = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
-            std::shared_ptr<Pokemon> activePokemon = std::make_shared<Pokemon>(receivedPokemon);
-
-            system("clear");
-            std::cout << "Your pokemon died, choose the next: \n";
-
-            int count = 1;
-            for(auto pokemon: game.player->pokemons)
-            {
-                if(pokemon.get_num() == activePokemon->get_num())
-                {
-                    std::cout << count++ << "." << pokemon.get_name() << "*\n";
-                    continue;
-                }
-                std::cout << count++ << "." << pokemon.get_name() << "\n";
-            }
-
-            int index;
-            std:: cin >> index;
-            int faint = client.call("pokemon_faint", game.player->getId(), index).as<int>();
-            if(faint) break;
-        }
+        enemy = client.call("get_enemy_pokemon", game.player->getId()).as<Pokemon>();
+        enemyPokemon = std::make_shared<Pokemon>(enemy);
     }
+    system("clear");
 
     std::cout << client.call("get_duel_message").as<std::string>() << "\n";
 
-    std::cout << "\n----------------------------------------------- \n";
+    std::cout << "----------------------------------------------- \n";
 
     std::cout << "Enemy: " << enemyPokemon->get_name() << "\n";
     std::cout << "Health: " << enemyPokemon->get_health() << "\n";
@@ -70,6 +50,45 @@ void draw_duel()
     std::cout << "Health: " << yourPokemon->get_health() << "\n";
 
     std::cout << "\n----------------------------------------------- \n";
+    
+    if(yourPokemon->get_health() <= 0)
+    {
+        while(1)
+        {
+            auto receivedPokemon = client.call("get_active_pokemon", game.player->getId()).as<Pokemon>();
+            std::shared_ptr<Pokemon> activePokemon = std::make_shared<Pokemon>(receivedPokemon);
+
+            system("clear");
+            std::cout << "Your pokemon died, choose the next: \n";
+            
+            auto pokemons = client.call("get_pokemons", game.player->getId()).as<std::vector<std::shared_ptr<Pokemon>>>();
+            int count = 1;
+            for(auto pokemon: pokemons)
+            {
+                if(pokemon->is_fainted())
+                {
+                    count++;
+                    continue;
+                }
+
+                if(pokemon->get_num() == activePokemon->get_num())
+                {
+                    std::cout << count++ << "." << pokemon->get_name() << "*\n";
+                    continue;
+                }
+                std::cout << count++ << "." << pokemon->get_name() << "\n";
+            }
+
+            int index;
+            std:: cin >> index;
+            int faint = client.call("pokemon_faint", game.player->getId(), index).as<int>();
+            if(faint)
+            {
+                draw_duel();
+                break;
+            }
+        }
+    }
 }
 
 int main() 
@@ -93,7 +112,7 @@ int main()
                 continue;
             case GAME_CHOOSE_STARTER:
                 {
-                    auto pokemons = client.call("start_pokebag", game.player->getId()).as<std::vector<Pokemon>>();
+                    auto pokemons = client.call("start_pokebag", game.player->getId()).as<std::vector<std::shared_ptr<Pokemon>>>();
                     if(!pokemons.empty())
                         game.player->pokemons = pokemons;
 
@@ -134,16 +153,24 @@ int main()
                         if(activePokemon == nullptr)
                             std::cout << "pokemon nao chegou\n";
 
+                        auto pokemons  = client.call("get_pokemons", game.player->getId()).as<std::vector<std::shared_ptr<Pokemon>>>();
+
                         std::cout << "\n0. Back\n";
                         int count = 1;
-                        for(auto pokemon: game.player->pokemons)
+                        for(auto pokemon: pokemons)
                         {
-                            if(pokemon.get_num() == activePokemon->get_num())
+                            if(pokemon->get_health() <= 0)
                             {
-                                std::cout << count++ << "." << pokemon.get_name() << "*\n";
+                                count++;
                                 continue;
                             }
-                            std::cout << count++ << "." << pokemon.get_name() << "\n";
+
+                            if(pokemon->get_num() == activePokemon->get_num())
+                            {
+                                std::cout << count++ << "." << pokemon->get_name() << "*\n";
+                                continue;
+                            }
+                            std::cout << count++ << "." << pokemon->get_name() << "\n";
                         }
                     }
 

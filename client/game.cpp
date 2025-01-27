@@ -12,7 +12,7 @@ void Game::start(rpc::client& client)
     std::cout << "choose your starter: \n";
     int count = 1;
     for(auto pokemon: player->pokemons)
-        std::cout << count++ << "." << pokemon.get_name() << "\n";
+        std::cout << count++ << "." << pokemon->get_name() << "\n";
 
     int starter;
     std::cin >> starter;
