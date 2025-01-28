@@ -105,6 +105,10 @@ void draw_duel()
 
 int main()
 {
+    std::string ip;
+    std::cout << "Em qual ip o cliente deve se conectar?\n"; 
+    std::cin >> ip;
+
     int port;
     std::cout << "Em qual porta o cliente deve se conectar?\n"; 
     std::cin >> port;
