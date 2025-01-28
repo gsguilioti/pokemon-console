@@ -11,7 +11,10 @@ std::mutex game_mutex;
 
 int main()
 {
-    rpc::server srv(8080);
+    int port;
+    std::cout << "Em qual porta o servidor deve ser aberto?\n"; 
+    std::cin >> port;
+    rpc::server srv(port);
 
     srv.bind("connect", [&]() 
     {
