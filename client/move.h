@@ -10,7 +10,7 @@ public:
         : id(id), name(name), power(power) {}
     Move() = default;
 
-    std::string get_name(){ return name; };
+    std::string get_name() const { return name; };
 
     MSGPACK_DEFINE(id, name, power);
 private:

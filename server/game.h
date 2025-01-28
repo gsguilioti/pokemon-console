@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <iostream>
 #include <mutex>
-#include <tuple>
 #include <memory>
 #include <vector>
 #include <algorithm>

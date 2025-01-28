@@ -98,7 +98,7 @@ std::string Player::execute_battle(int option, std::shared_ptr<Player> enemy)
     std::cout << "player: " << this->get_id() << " dealt " << damage << " damage to enemy\n";
     enemy->get_active_pokemon()->set_health(enemy->get_active_pokemon()->get_health() - damage);
 
-    std::string message = "Player " + std::to_string(this->get_id()) + " dealt " + std::to_string(damage) + " damage to " + this->pokemons[option - 1]->get_name() + "\n";
+    std::string message = "Player " + std::to_string(this->get_id()) + " dealt " + std::to_string(damage) + " damage to " + enemy->get_active_pokemon()->get_name() + "\n";
     if(enemy->get_active_pokemon()->get_health() <= 0)
     {
         enemy->get_active_pokemon()->set_fainted();

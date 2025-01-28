@@ -25,6 +25,9 @@ void Duel::start()
 
         if(this->playerOne->get_duel_action() || this->playerTwo->get_duel_action())
             this->execute_battle();
+
+        if(playerOne->all_pokemons_fainted() || playerTwo->all_pokemons_fainted())
+            break;
     }
 }
 

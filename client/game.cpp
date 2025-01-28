@@ -1,13 +1,12 @@
-#include "game.h"
 #include <mutex>
 #include <thread>
 #include <chrono>
 
+#include "game.h"
+
 void Game::start(rpc::client& client)
 {
-    this->duel = std::make_shared<Duel>();
     std::cout << "the game started\n";
-    this->state = GAME_CHOOSE_STARTER;
 
     std::cout << "choose your starter: \n";
     int count = 1;
