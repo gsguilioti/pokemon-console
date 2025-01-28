@@ -25,3 +25,5 @@
 - Execute os clientes informando a porta na qual o servidor está executando
 
 > os executaveis precisam ser executados de dentro da pasta /build/ para poder pegar os recursos do lugar certo
+
+> os executaveis do ultimo build estão na pasta raiz, jogue-os nas pastas corretas e não precisará compilar manualmente(funcionará em linux ubuntu)
