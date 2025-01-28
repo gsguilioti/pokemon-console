@@ -94,7 +94,7 @@ std::string Player::execute_battle(int option, std::shared_ptr<Player> enemy)
     auto active = this->get_active_pokemon();
     auto move = active->get_moves()[option -1];
 
-    int damage = (active->get_atk() + (move.get_power() * 2) - enemy->get_active_pokemon()->get_def());
+    int damage = std::max(1, static_cast<int>(std::floor((active->get_atk() * (move.get_power()) / enemy->get_active_pokemon()->get_def()))));
     std::cout << "player: " << this->get_id() << " dealt " << damage << " damage to enemy\n";
     enemy->get_active_pokemon()->set_health(enemy->get_active_pokemon()->get_health() - damage);
 
@@ -103,6 +103,7 @@ std::string Player::execute_battle(int option, std::shared_ptr<Player> enemy)
     {
         enemy->get_active_pokemon()->set_fainted();
         message += enemy->get_active_pokemon()->get_name() + " fainted.\n";
+        enemy->set_duel_action(false);
     }
 
     this->set_duel_action(false);

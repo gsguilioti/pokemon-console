@@ -213,8 +213,7 @@ int main()
             system("clear");
 
             std::cout << "waiting for enemy." << std::flush;
-            while (!client->call("get_players_actions").as<bool>())
-                ;
+            while (!client->call("get_players_actions").as<bool>());
         }
         continue;
 

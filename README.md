@@ -23,3 +23,5 @@
 
 - Abra uma instância do terminal separado e execute o servidor, será solicitado a porta
 - Execute os clientes informando a porta na qual o servidor está executando
+
+> os executaveis precisam ser executados de dentro da pasta /build/ para poder pegar os recursos do lugar certo

@@ -3,22 +3,22 @@
         {
             "id": 1,
             "name": "Tackle",
-            "power": 5
+            "power": 10
         },
         {
             "id": 2,
             "name": "Vine Whip",
-            "power": 6
+            "power": 15
         },
         {
             "id": 3,
             "name": "Ember",
-            "power": 7
+            "power": 16
         },
         {
             "id": 4,
             "name": "Bubble",
-            "power": 4
+            "power": 14
         }
     ]
 }
